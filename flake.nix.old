@@ -1,0 +1,69 @@
+{
+  description = "nixos configuration btw";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    sops-nix = {
+      url = "github:mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";  # recommended: avoid duplicate nixpkgs versions
+    };
+
+    nixd = {
+      url = "github:nix-community/nixd";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nil = {
+      url= "github:oxalica/nil";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixvim = {
+      url = "github:nix-community/nixvim";
+    };
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = { self, nixpkgs, nixd, nil, ghostty, nixvim, home-manager, sops-nix, ... }@inputs: {
+    let 
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      inherit system;
+
+      specialArgs = { inherit inputs; };  # passes the whole inputs attrset
+
+      modules = [
+        ./configuration.nix
+	sops-nix.nixosModules.sops
+        ({pkgs, ...}: {
+          environment.systemPackages = [
+ 	     ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
+          ];
+        })
+      ];
+
+      homeConfigurations = {
+          lucas = home-manager.lib.homeManagerConfiguration {
+              inherit nixpkgs.legacyPackages.x86_64-linx;
+              modules = [ ./home.nix ];
+              extraSpecialArgs = { inherit inputs; };
+          };
+      };
+      home-manager.extraSpecialArgs = { inherit inputs; };
+
+    };
+  };
+ }
+}
