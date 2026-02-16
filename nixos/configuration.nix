@@ -21,6 +21,9 @@
   time.timeZone = "Australia/Sydney";
   i18n.defaultLocale = "en_AU.UTF-8";
 
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.xterm.enable = false;
+
   services.xserver = {
     enable = true;
     displayManager = {
