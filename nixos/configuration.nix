@@ -24,16 +24,14 @@
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.desktopManager.xterm.enable = false;
 
+  services.displayManager.defaultSession = "none+i3";
+
   services.xserver = {
     enable = true;
-    displayManager = {
-      defaultSession= "none+i3";
-    };
-    displayManager.lightdm.enable = true;
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
-        dmenu i3status i3lock i3blocks
+        dmenu i3status i3lock i3blocks rofi maim xclip
       ];
     };
     videoDrivers = [ "nvidia" ];
@@ -65,16 +63,15 @@
     gcc-arm-embedded python3Packages.pip swig file clang-tools
     net-tools iproute2 blueman networkmanager bluez bluez-tools 
     dnsmasq jetbrains-mono dive podman-tui docker-compose freerdp
-    dialog libnotify podman podman-compose ncdu gtk3 nss xorg.libXtst
+    dialog libnotify podman podman-compose ncdu gtk3 nss libxtst
     xdg-utils dpkg brasero networkmanagerapplet ripgrep inetutils
-    brightnessctl playerctl quickshell mdhtml typescript-language-server
+    brightnessctl playerctl quickshell mdhtml maim xclip typescript-language-server
     jdt-language-server openjdk dotool opencode lsof gimp firefox
-    python314 teams-for-linux
+    python314 teams-for-linux sops
     (import ./git-repos.nix {inherit pkgs;})
     (import ./sud.nix {inherit pkgs;})
-    (import ./hm-setup.nix {inherit pkgs;})
-    inputs.nixd.packages."${pkgs.system}".nixd
-    inputs.nil.packages."${pkgs.system}".nil
+    inputs.nixd.packages."${pkgs.stdenv.hostPlatform.system}".nixd
+    inputs.nil.packages."${pkgs.stdenv.hostPlatform.system}".nil
   ];
 
   services.openssh.enable = true;

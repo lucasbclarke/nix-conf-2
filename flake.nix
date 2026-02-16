@@ -32,9 +32,14 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    winapps = {
+      url = "github:winapps-org/winapps";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, sops-nix, ghostty, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, sops-nix, ghostty, home-manager, winapps, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -45,9 +50,19 @@
         modules = [
           ./nixos/configuration.nix
           sops-nix.nixosModules.sops
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.backupFileExtension = "bak";
+            home-manager.users.lucas = ./home.nix;
+          }
           ({ pkgs, ... }: {
             environment.systemPackages = [
               ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
+              winapps.packages."${system}".winapps
+              winapps.packages."${system}".winapps-launcher 
             ];
           })
         ];

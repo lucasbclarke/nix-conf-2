@@ -3,6 +3,7 @@
 {
   imports = [
     ./usr/zsh.nix
+    ./usr/i3.nix
     ./usr/terminal.nix
     ./usr/nvim/nvim.nix
     ./usr/nvim/keymaps.nix
@@ -50,7 +51,7 @@
         selected_color = "#ebbcba";
         selected_text_color = "#191724";
         border_color = "#26233a";
-        border_width = 2;
+        border_width = 0;
       };
 
       style = ''
@@ -58,7 +59,7 @@
           margin: 0px;
           background-color: #191724;
           border-radius: 0px;
-          border: 2px solid #ebbcba;
+          border: 0px solid #ebbcba;
           color: #e0def4;
           font-family: 'Jetbrains Nerd Font';
           font-size: 20px;
