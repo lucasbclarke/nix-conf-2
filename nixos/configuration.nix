@@ -29,13 +29,14 @@
     displayManager = {
       defaultSession= "none+i3";
     };
+    displayManager.lightdm.enable = true;
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
         dmenu i3status i3lock i3blocks
       ];
     };
-    videoDrivers = [ "modesetting" "nvidia" ];
+    videoDrivers = [ "nvidia" ];
   };
   services.xserver.xkb.layout = "au";
 
@@ -183,15 +184,6 @@
       defaultNetwork.settings.dns_enabled = true;
     };
   };
-
-  boot.blacklistedKernelModules = lib.mkForce [ ];
-  boot.extraModprobeConfig = ''
-    blacklist # cleared by NixOS config
-  '';
-
-  system.activationScripts.removeKvmBlacklist.text = ''
-    rm -f /etc/modprobe.d/blacklist-kvm.conf
-  '';
 
   services.logind.settings.Login.HandleLidSwitch = "ignore";
 
