@@ -20,6 +20,7 @@ in
         { command = "${setupDisplays} &"; always = true; }
         { command = startGhostty; always = false; }
         { command = "qs &"; always = false; }
+        { command = "win &"; always = false; }
       ];
 
       # Assign Ghostty to workspace 1 (WM_CLASS is "ghostty" / "com.mitchellh.ghostty")
@@ -34,6 +35,7 @@ in
         "${modifier}+d" = "exec ${menu}";
         "${modifier}+Shift+c" = "restart";
         "${modifier}+b" = "exec brave";
+        "${modifier}+q" = "exec qutebrowser";
         "${modifier}+Shift+d" = "exec Discord";
         "${modifier}+Shift+e" = "exec i3-nagbar -t warning -m 'Exit i3?' -B 'Yes, exit i3' 'i3-msg exit'";
         "${modifier}+p" = "exec powersupply";
